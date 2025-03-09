@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <title>Todo List</title>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <button id="sidebar-toggle" class="sidebar-toggle">
+                <span class="toggle-icon">☰</span>
+            </button>
+            <h2>&nbspWorkspace</h2>
+            <ul>
+                <li class="sidebar-item active" data-page="tasks">
+                    <span class="sidebar-icon">📝</span>
+                    <span class="sidebar-text">Tasks</span>
+                </li>
+                <li class="sidebar-item" data-page="organizer">
+                    <span class="sidebar-icon">📁</span>
+                    <span class="sidebar-text">File Organizer</span>
+                </li>
+                <li class="sidebar-item" data-page="settings">
+                    <span class="sidebar-icon">⚙️</span>
+                    <span class="sidebar-text">Settings</span>
+                </li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div id="tasks-page" class="page active">
+                <div class="top-bar">
+                    <h1>Tasks</h1>
+                    <button class="add-button" id="add-task">+ New Task</button>
+                </div>
+                <div class="tasks-container" id="tasks-list">
+                    <!-- Tasks will be added here dynamically -->
+                </div>
+            </div>
+            <div id="organizer-page" class="page">
+                <div class="top-bar">
+                    <h1>File Organizer</h1>
+                </div>
+                <div class="file-organizer-container">
+                    <div class="drop-zone">
+                        <div class="drop-zone-content">
+                            <span class="drop-icon">📁</span>
+                            <p>Drag and drop files here</p>
+                        </div>
+                    </div>
+                    <div class="processing">
+                        <p class="processing-text">Organizing files...</p>
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="settings-page" class="page">
+                <div class="top-bar">
+                    <h1>Settings</h1>
+                </div>
+                <div class="settings-container">
+                    <div class="color-settings">
+                        <h2>Theme Colors</h2>
+                        <div class="color-option">
+                            <label>Primary Color:</label>
+                            <input type="color" id="primary-color">
+                        </div>
+                        <div class="color-option">
+                            <label>Background Color:</label>
+                            <input type="color" id="background-color">
+                        </div>
+                        <div class="color-option">
+                            <label>Sidebar Color:</label>
+                            <input type="color" id="sidebar-color">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Task Modal -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <h2>Add New Task</h2>
+            <div class="form-group">
+                <label for="task-input">Task:</label>
+                <input type="text" id="task-input" placeholder="Enter your task">
+            </div>
+            <div class="form-group">
+                <label for="task-date">Date:</label>
+                <input type="date" id="task-date" class="date-input">
+            </div>
+            <div class="form-group">
+                <label for="time-input">Time:</label>
+                <div class="time-input-container">
+                    <input type="time" id="start-time" class="time-input">
+                    <span>to</span>
+                    <input type="time" id="end-time" class="time-input">
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button id="cancel-task" class="cancel-button">Cancel</button>
+                <button id="save-task" class="save-button">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-confirm-modal" class="modal">
+        <div class="modal-content">
+            <h2>Delete Task</h2>
+            <p>Are you sure you want to delete this task?</p>
+            <div class="modal-buttons">
+                <button id="cancel-delete" class="cancel-button">Cancel</button>
+                <button id="confirm-delete" class="save-button">Delete</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

@@ -93,7 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>${task.startTime} - ${task.endTime}</span>
                     </div>
                 </div>
-                <button class="delete-button" data-index="${index}">🗑️</button>
+                <div class="task-actions">
+                    <button class="edit-button" data-index="${index}">✏️</button>
+                    <button class="delete-button" data-index="${index}">🗑️</button>
+                </div>
             `;
             tasksList.appendChild(taskElement);
         });
@@ -113,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         taskModal.classList.add('active');
     });
 
+    // Single event listener for save task
     document.getElementById('save-task').addEventListener('click', () => {
         const taskText = document.getElementById('task-input').value.trim();
         const taskDate = document.getElementById('task-date').value;
@@ -120,13 +124,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const endTime = document.getElementById('end-time').value;
 
         if (taskText) {
-            tasks.push({
-                text: taskText,
-                date: taskDate,
-                startTime: startTime,
-                endTime: endTime,
-                completed: false
-            });
+            const editIndex = taskModal.dataset.editIndex;
+            if (editIndex !== undefined) {
+                tasks[editIndex] = {
+                    text: taskText,
+                    date: taskDate,
+                    startTime: startTime,
+                    endTime: endTime,
+                    completed: tasks[editIndex].completed
+                };
+                delete taskModal.dataset.editIndex;
+            } else {
+                tasks.push({
+                    text: taskText,
+                    date: taskDate,
+                    startTime: startTime,
+                    endTime: endTime,
+                    completed: false
+                });
+            }
             renderTasks();
             taskModal.classList.remove('active');
         }
@@ -147,9 +163,19 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (e.target.matches('.delete-button')) {
             taskToDelete = parseInt(e.target.dataset.index);
             deleteModal.classList.add('active');
+        } else if (e.target.matches('.edit-button')) {
+            const index = parseInt(e.target.dataset.index);
+            const task = tasks[index];
+            document.getElementById('task-input').value = task.text;
+            document.getElementById('task-date').value = task.date;
+            document.getElementById('start-time').value = task.startTime;
+            document.getElementById('end-time').value = task.endTime;
+            taskModal.classList.add('active');
+            taskModal.dataset.editIndex = index;
         }
     });
 
+    // Delete confirmation
     document.getElementById('confirm-delete').addEventListener('click', () => {
         if (taskToDelete !== null) {
             tasks.splice(taskToDelete, 1);
@@ -164,9 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
         taskToDelete = null;
     });
 
-    // Theme Settings
-    Object.entries(colorInputs).forEach(([key, input]) => {
-        input.addEventListener('change', (e) => {
+    // Color settings
+    Object.keys(colorInputs).forEach(key => {
+        colorInputs[key].addEventListener('change', (e) => {
             themeColors[key] = e.target.value;
             localStorage.setItem('themeColors', JSON.stringify(themeColors));
             applyThemeColors();
@@ -174,8 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Initial render
-    applyThemeColors();
     renderTasks();
+    applyThemeColors();
 });
 
 // File Organizer functionality
